@@ -7,4 +7,4 @@ Edit `example.env`, save as `.env` then:
 ```
 npm i
 node godaddy.js
-``
+```
