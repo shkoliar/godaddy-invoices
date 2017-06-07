@@ -1,0 +1,32 @@
+{
+  "name": "godaddy-invoices",
+  "version": "0.1.0",
+  "description": "Use nightmare to login to GoDaddy, grab all invoice data and render to pretty PDFs",
+  "main": "godaddy.js",
+  "scripts": {
+    "start": "node godaddy.js"
+  },
+  "dependencies": {
+    "dotenv": "^4.0.0",
+    "express": "^4.15.3",
+    "handlebars": "^4.0.10",
+    "nightmare": "^2.10.0",
+    "vo": "^4.0.2"
+  },
+  "engines": {
+    "node": "4.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/l422y/godaddy-invoices"
+  },
+  "keywords": [
+    "node",
+    "godaddy",
+    "nightmare",
+    "vo"
+  ],
+  "author": "Larry Williamson",
+  "contributors": [],
+  "license": "MIT"
+}
