@@ -21,6 +21,7 @@ var run = function * () {
 
 	yield nightmare
 	.goto('https://sso.godaddy.com/?realm=idp&path=%2F&app=mya')
+	.wait('input.username-input')
 	.type('input.username-input', process.env.GODADDY_U)
 	.type('input[type="password"]', process.env.GODADDY_P)
 	.click('button#submitBtn')
