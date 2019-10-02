@@ -6,5 +6,7 @@ Edit `example.env`, save as `.env` then:
 
 ```
 npm i
-node godaddy.js
+node godaddy.js [year]
 ```
+
+If the year parameter is omitted, the current year will be used.
