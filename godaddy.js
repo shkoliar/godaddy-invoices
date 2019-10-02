@@ -5,8 +5,8 @@ var fs = require('fs');
 
 const app = express();
 const Nightmare = require('nightmare');		
-const nightmare = Nightmare({ show: process.env.SHOW_WINDOW,  typeInterval: 10,   openDevTools: false });
-nightmare.viewport(1024,768);
+const nightmare = Nightmare({ show: process.env.SHOW_WINDOW,  typeInterval: 10, openDevTools: false });
+nightmare.viewport(1024, 768);
 
 var handlebars = require("handlebars");
 var template = handlebars.compile(fs.readFileSync('wrapper.hbs','utf8'));
@@ -25,7 +25,7 @@ var run = function * () {
 	.type('input.username-input', process.env.GODADDY_U)
 	.type('input[type="password"]', process.env.GODADDY_P)
 	.click('button#submitBtn')
-	.wait('li#account-dropdown')
+	.wait('div.customer-menu')
 	.goto('https://account.godaddy.com/orders')
 	.wait('div.qa-order-list-item')
 	.evaluate(function () {
@@ -53,11 +53,11 @@ var run = function * () {
 			if(!fs.existsSync(pdf_loc)){
 				yield nightmare
 				.goto('https://account.godaddy.com/orders/receipt/'+item)
-				.wait('.order-action-tray')
-				.wait(1000)
+				.wait('div.order-action-tray')
+				.wait(3000)
 				.evaluate(function(){
 					let o = document.querySelector('div.ember-modal-dialog-center');
-					let ev = o.querySelector('.ember-view > .ember-view');
+					let ev = o.querySelector('div.ember-view > div.ember-view');
 					ev.style="";
 					return o.innerHTML;
 				}).then(function(result){
@@ -73,13 +73,11 @@ var run = function * () {
 		};
 	};
 
-	
-
 	var server = app.listen(app.get('port'), function() {
 		var port = server.address().port;
 	});
 
-let rendered_pdfs = [];
+	let rendered_pdfs = [];
 	for(var idx in receipts) {
 		let item = receipts[idx];
 		yield pdfResult = function*(){
@@ -92,7 +90,7 @@ let rendered_pdfs = [];
 			fs.writeFileSync(__dirname + '/invoices/' + html_file, html);
 			return yield  nightmare
 			.goto('http://127.0.0.1:'+process.env.LISTEN_PORT+'/'+html_file)
-			.wait('.ember-view')
+			.wait('div.ember-view')
 			.pdf(pdf_loc)
 			.then(function(err){
 				console.log('render:', pdf_file);
@@ -111,7 +109,6 @@ let rendered_pdfs = [];
 };
 
 
-
 vo(run)(function(err, rendered_pdfs) {
 	if(err){
 		console.log(err);
@@ -119,7 +116,7 @@ vo(run)(function(err, rendered_pdfs) {
 	if(rendered_pdfs.length == 0) {
 		console.log('no new invoices');
 	} else {
-		console.log('rendered',rendered_pdfs.length,'pdfs');
+		console.log('rendered', rendered_pdfs.length, 'pdfs');
 	}
 	process.exit();
 });
